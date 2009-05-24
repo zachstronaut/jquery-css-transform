@@ -25,5 +25,9 @@ under both MIT and GPL licenses, just like jQuery.
 Change Log
 -----------------------------
 
-2009.02.23 - Added to github.
+2009.05.24 - Updated to usual jQuery patch/plugin pattern where jQuery is passed in as $ argument.
+           - Monkey Patched call to css() really only needed key as a named argument.
+           - Neither of these updates really change anything.  Mostly just code cleanliness issues.
+
+2009.02.23 - Added to GitHub.
 
