@@ -25,6 +25,8 @@ under both MIT and GPL licenses, just like jQuery.
 Change Log
 -----------------------------
 
+2009.07.15 - Update to make sure that you can use css({transform: value}) style syntax, too.
+
 2009.05.24 - Updated to usual jQuery patch/plugin pattern where jQuery is passed in as $ argument.
            - Monkey Patched call to css() really only needed key as a named argument.
            - Neither of these updates really change anything.  Mostly just code cleanliness issues.
