@@ -10,9 +10,11 @@ in Webkit/Safari/Chrome and Firefox 3.5 in a uniform way with the jQuery css()
 method.  You can simply do the following rather than using browser specific
 properties:
 
-$('#example').css('transform', 'rotate(165deg)');
+$('#example').css('transform', 'rotate(165deg)'); // Set rotation transform
+$('#example').css({transform: 'rotate(165deg)'}); // Set rotation transform
+$('#example').css('transform'); // Get and return transform string as it was set
 
-Load jquery-css-transform.js in your project after loading jQuery.
+To use the patch, load jquery-css-transform.js in your project after loading jQuery.
 
 For more information visit:
 http://www.zachstronaut.com/posts/2009/02/22/jquery-patch-css-transform.html
@@ -23,6 +25,15 @@ under both MIT and GPL licenses, just like jQuery.
 -----------------------------
 Change Log
 -----------------------------
+
+2010.11.06 - Update to address new behavior in jQuery 1.4.3 where getting the
+             transform property with css() would return a matrix instead of
+             the transformation string as set by the user.  It is important to
+             note that this patch forces the old behavior at this time in order
+             to properly support old code using this patch.
+           - Update to correctly support setting transform via
+             css({transform: value}) style syntax. (Guess I missed something
+             in that 2009.07.15 update.)
 
 2009.07.15 - Update to make sure that you can use css({transform: value}) style syntax, too.
 

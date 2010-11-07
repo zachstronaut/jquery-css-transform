@@ -1,7 +1,8 @@
 (function ($) {
     // Monkey patch jQuery 1.3.1+ css() method to support CSS 'transform'
     // property uniformly across Webkit/Safari/Chrome and Firefox 3.5.
-    // 2009 Zachary Johnson www.zachstronaut.com
+    // 2009-2010 Zachary Johnson www.zachstronaut.com
+    // Updated 2010.11.06
     function getTransformProperty(element)
     {
         // Try transform first for forward compatibility
@@ -20,7 +21,7 @@
     }
     
     var proxied = $.fn.css;
-    $.fn.css = function (arg)
+    $.fn.css = function (arg, val)
     {
         // Find the correct browser specific property and setup the mapping using
         // $.props which is used internally by jQuery.attr() when setting CSS
@@ -51,9 +52,37 @@
         // but curCSS() does *not* do property mapping when *getting* a
         // CSS property.  (It probably should since it manually does it
         // for 'float' now anyway... but that'd require more testing.)
-        if (arg == 'transform')
+        //
+        // But, only do the forced mapping if the correct CSS property
+        // is not 'transform' and is something else.
+        if ($.props['transform'] != 'transform')
         {
-            arg = $.props['transform'];
+            // Call in form of css('transform' ...)
+            if (arg == 'transform')
+            {
+                arg = $.props['transform'];
+                
+                // User wants to GET the transform CSS, and in jQuery 1.4.3
+                // calls to css() for transforms return a matrix rather than
+                // the actual string specified by the user... avoid that
+                // behavior and return the string by calling jQuery.style()
+                // directly
+                if (typeof val == 'undefined' && jQuery.style)
+                {
+                    return jQuery.style(this.get(0), arg);
+                }
+            }
+
+            // Call in form of css({'transform': ...})
+            else if
+            (
+                typeof arg == 'object'
+                && typeof arg['transform'] != 'undefined'
+            )
+            {
+                arg[$.props['transform']] = arg['transform'];
+                delete arg['transform'];
+            }
         }
         
         return proxied.apply(this, arguments);
