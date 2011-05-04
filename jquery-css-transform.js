@@ -2,11 +2,13 @@
     // Monkey patch jQuery 1.3.1+ css() method to support CSS 'transform'
     // property uniformly across Webkit/Safari/Chrome, Firefox 3.5+, and IE 9+.
     // 2009-2010 Zachary Johnson www.zachstronaut.com
-    // Updated 2010.11.26
+    // Updated 2011.05.04 (May the fourth be with you!)
     function getTransformProperty(element)
     {
         // Try transform first for forward compatibility
-        var properties = ['transform', 'WebkitTransform', 'MozTransform', 'msTransform', 'OTransform'];
+        // In some versions of IE9, it is critical for msTransform to be in
+        // this list before MozTranform.
+        var properties = ['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'];
         var p;
         while (p = properties.shift())
         {
@@ -20,9 +22,29 @@
         return 'transform';
     }
     
+    var _propsObj = null;
+    
     var proxied = $.fn.css;
     $.fn.css = function (arg, val)
     {
+        // Temporary solution for current 1.6.x incompatibility, while
+        // preserving 1.3.x compatibility, until I can rewrite using CSS Hooks
+        if (_propsObj === null)
+        {
+            if (typeof $.cssProps != 'undefined')
+            {
+                _propsObj = $.cssProps;
+            }
+            else if (typeof $.props != 'undefined')
+            {
+                _propsObj = $.props;
+            }
+            else
+            {
+                _propsObj = {}
+            }
+        }
+        
         // Find the correct browser specific property and setup the mapping using
         // $.props which is used internally by jQuery.attr() when setting CSS
         // properties via either the css(name, value) or css(properties) method.
@@ -32,7 +54,7 @@
         // DOM-is-ready events have fired.
         if
         (
-            typeof $.props['transform'] == 'undefined'
+            typeof _propsObj['transform'] == 'undefined'
             &&
             (
                 arg == 'transform'
@@ -44,7 +66,7 @@
             )
         )
         {
-            $.props['transform'] = getTransformProperty(this.get(0));
+            _propsObj['transform'] = getTransformProperty(this.get(0));
         }
         
         // We force the property mapping here because jQuery.attr() does
@@ -55,12 +77,12 @@
         //
         // But, only do the forced mapping if the correct CSS property
         // is not 'transform' and is something else.
-        if ($.props['transform'] != 'transform')
+        if (_propsObj['transform'] != 'transform')
         {
             // Call in form of css('transform' ...)
             if (arg == 'transform')
             {
-                arg = $.props['transform'];
+                arg = _propsObj['transform'];
                 
                 // User wants to GET the transform CSS, and in jQuery 1.4.3
                 // calls to css() for transforms return a matrix rather than
@@ -80,7 +102,7 @@
                 && typeof arg['transform'] != 'undefined'
             )
             {
-                arg[$.props['transform']] = arg['transform'];
+                arg[_propsObj['transform']] = arg['transform'];
                 delete arg['transform'];
             }
         }
