@@ -6,9 +6,9 @@ Zachary Johnson
 www.zachstronaut.com
 
 This monkey patch for jQuery 1.3.1+ allows you to set and get CSS Transforms
-in Webkit/Safari/Chrome, Firefox 3.5+, and IE9 (Platform Preview 7+) in a
-uniform way with the jQuery css() method.  You can simply do the following
-rather than using browser specific properties:
+in Safari/Chrome/Webkit, Firefox 3.5+, IE 9+, and Opera 11+ in a uniform way
+with the jQuery css() method.  You can simply do the following rather than
+using browser specific properties:
 
 $('#example').css('transform', 'rotate(165deg)'); // Set rotation transform
 $('#example').css({transform: 'rotate(165deg)'}); // Set rotation transform
