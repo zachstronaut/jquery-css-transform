@@ -1,7 +1,7 @@
 (function ($) {
     // Monkey patch jQuery 1.3.1+ css() method to support CSS 'transform'
     // property uniformly across Webkit/Safari/Chrome, Firefox 3.5+, and IE 9+.
-    // 2009-2010 Zachary Johnson www.zachstronaut.com
+    // 2009-2011 Zachary Johnson www.zachstronaut.com
     // Updated 2011.05.04 (May the fourth be with you!)
     function getTransformProperty(element)
     {
