@@ -12,7 +12,7 @@
         var p;
         while (p = properties.shift())
         {
-            if (typeof element.style[p] != 'undefined')
+            if (element && typeof element.style[p] != 'undefined')
             {
                 return p;
             }
